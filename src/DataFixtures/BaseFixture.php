@@ -65,16 +65,37 @@ abstract class BaseFixture extends Fixture
     {
         // Si les references ne sont pas présentes dans la propriété:
         if (!isset($this->references[$groupName])) {
+            $this->references[$groupName] = [];
+
             // Récupération des références
             foreach ($this->referenceRepository->getReferences() as $key => $ref) {
                 if (strpos($key, $groupName . '_') === 0) {
-                    $this->references[$groupName][] = $ref;
+                    $this->references[$groupName][] = $key;
                 }
             }
+        }
+
+        // Vérifier que des références ont été enregistrées
+        if (empty($this->references[$groupName])) {
+            throw new \Exception(sprintf('Aucune référence trouvée pour "%s"', $groupName));
         }
 
         // Retourner une référence aléatoire
         $randomReferenceKey = $this->faker->randomElement($this->references[$groupName]);
         return $this->getReference($randomReferenceKey);
+    }
+
+    /**
+     * Récupérer plusieurs entités
+     */
+    protected function getRandomReferences(string $groupName, int $amount)
+    {
+        $references = [];
+
+        while (count($references) < $amount) {
+            $references[] = $this->getRandomReference($groupName);
+        }
+
+        return $references;
     }
 }

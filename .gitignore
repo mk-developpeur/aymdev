@@ -21,5 +21,5 @@ yarn-error.log
 
 # Ignorer le dossier créé par PHPStorm
 /.idea
-
+docker-compose.yml
 
