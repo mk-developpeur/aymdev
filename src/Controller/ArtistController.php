@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Artist;
+use App\Form\Artist\SearchFormType;
 use App\Repository\ArtistRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -17,10 +19,22 @@ class ArtistController extends AbstractController
      * Nom: artist_list
      * @Route("-list", name="list")
      */
-    public function index(ArtistRepository $artistRepository)
+    public function index(Request $request, ArtistRepository $artistRepository)
     {
+        // Création du formulaire
+        $form = $this->createForm(SearchFormType::class);
+        // Traitement de la requête par le formulaire
+        $form->handleRequest($request);
+
+        // Si le formulaire est envoyé & valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            dd($data);
+        }
+
         return $this->render('artists/list.html.twig', [
-            'artist_list' => $artistRepository->findAll()
+            'artist_list' => $artistRepository->findAll(),
+            'search_form' => $form->createView()
         ]);
     }
 
