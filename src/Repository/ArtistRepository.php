@@ -20,6 +20,18 @@ class ArtistRepository extends ServiceEntityRepository
     }
 
     /**
+     * Chercher par nom
+     */
+    public function searchByName(string $name)
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.name LIKE :name')
+            ->setParameter('name', '%' . $name . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Obtenir la liste des DJs
      */
     public function findDjs()

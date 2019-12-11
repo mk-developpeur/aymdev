@@ -28,12 +28,19 @@ class ArtistController extends AbstractController
 
         // Si le formulaire est envoyé & valide
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            dd($data);
+            $recherche = $form->getData()['name'];
+
+            $list = $artistRepository->searchByName($recherche);
+            $title = sprintf('Résultats pour "%s"', $recherche);
+
+        } else {
+            $list = $artistRepository->findAll();
+            $title = 'Artistes';
         }
 
         return $this->render('artists/list.html.twig', [
-            'artist_list' => $artistRepository->findAll(),
+            'artist_list' => $list,
+            'title' => $title,
             'search_form' => $form->createView()
         ]);
     }
