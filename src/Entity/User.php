@@ -81,6 +81,11 @@ class User implements UserInterface
         if ($this->securityToken === null) {
             $this->renewToken();
         }
+
+        // Définir à false tant que le mail n'est pas authentifié
+        if ($this->isConfirmed === null) {
+            $this->setIsConfirmed(false);
+        }
     }
 
     public function getId(): ?int

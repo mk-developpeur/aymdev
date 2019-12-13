@@ -104,6 +104,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             throw new CustomUserMessageAuthenticationException('Mot de passe incorrect !');
         }
 
+        if ($user->getIsConfirmed() === false) {
+            throw new CustomUserMessageAuthenticationException('Mot de passe incorrect !');
+        }
+
         return $validation;
     }
 
